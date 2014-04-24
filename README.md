@@ -6,4 +6,4 @@
 
 —Gottlob Frege
 
-`fregerator` is an automated theorem prover. It extends Frege's above quote. Calculation becomes deduction, and deduction becomes computation, just like [everything else](http://arxiv.org/abs/1102.1612). 
+**fregerator** is an automated theorem prover. It extends Frege's above quote. Calculation becomes deduction, and deduction becomes computation, just like [everything else](http://arxiv.org/abs/1102.1612). 
