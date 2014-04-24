@@ -32,6 +32,21 @@ eval (e1 :/\: e2) vs = eval e1 vs && eval e2 vs
 eval (e1 :->: e2) vs = not (eval e1 vs) || eval e2 vs
 eval (e1 :<->: e2) vs = eval e1 vs == eval e2 vs
 
+-- Given a formula, return a list of all the variables.
+variables :: Formula -> [Char]
+variables (Var c) = [c]
+variables (Not e) = variables e
+variables (e1 :\/: e2) = variables' e1 e2
+variables (e1 :/\: e2) = variables' e1 e2
+variables (e1 :->: e2) = variables' e1 e2
+variables (e1 :<->: e2) = variables' e1 e2
+
+variables' e1 e2 = variables e1 ++ variables e2
+
+-- Generate all possible assignments of truth values to variable.
+--assignments :: Formula -> [Mapping]
+
+
 -- Reduces a formula to conjunctive normal form.
 cnf :: Formula -> Formula
 cnf f = f
