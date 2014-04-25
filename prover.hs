@@ -1,6 +1,8 @@
 import Prelude hiding (lookup)
 import Data.Map (Map, lookup, fromList)
 import Data.Maybe (fromMaybe)
+import Data.List (nub, permutations)
+import Data.List.Split (splitEvery)
 
 data Formula = Var Char
              | Not Formula
@@ -44,8 +46,12 @@ variables (e1 :<->: e2) = variables' e1 e2
 variables' e1 e2 = variables e1 ++ variables e2
 
 -- Generate all possible assignments of truth values to variable.
---assignments :: Formula -> [Mapping]
-
+assignments :: Formula -> [Mapping]
+assignments f = nub $ map fromList $ splitEvery (length vs) $ perms vs
+  where
+    vs = variables f
+    half tf vs = zip (concat (permutations vs)) (cycle tf)
+    perms vs = half [True, False] vs ++ half [False, True] vs
 
 -- Reduces a formula to conjunctive normal form.
 cnf :: Formula -> Formula
