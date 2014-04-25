@@ -46,6 +46,7 @@ variables (e1 :<->: e2) = variables' e1 e2
 variables' e1 e2 = variables e1 ++ variables e2
 
 -- Generate all possible assignments of truth values to variable.
+-- (p.s. this function is a disgusting mess)
 assignments :: Formula -> [Mapping]
 assignments f = nub $ map fromList $ splitEvery (length vs) $ perms vs
   where
