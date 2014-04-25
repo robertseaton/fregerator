@@ -57,6 +57,12 @@ assignments f = nub $ map fromList $ splitEvery (length vs) $ perms vs
 tautology :: Formula -> Bool
 tautology f = and $ map (eval f) (assignments f)
 
+unsatisfiable :: Formula -> Bool
+unsatisfiable f = tautology $ Not f
+
+satisfiable :: Formula -> Bool
+satisfiable f = not $ unsatisfiable f
+
 -- Reduces a formula to conjunctive normal form.
 cnf :: Formula -> Formula
 cnf f = f
