@@ -53,6 +53,9 @@ assignments f = nub $ map fromList $ splitEvery (length vs) $ perms vs
     half tf vs = zip (concat (permutations vs)) (cycle tf)
     perms vs = half [True, False] vs ++ half [False, True] vs
 
+tautology :: Formula -> Bool
+tautology f = and $ map (eval f) (assignments f)
+
 -- Reduces a formula to conjunctive normal form.
 cnf :: Formula -> Formula
 cnf f = f
