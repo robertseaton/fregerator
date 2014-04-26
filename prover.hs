@@ -63,6 +63,19 @@ unsatisfiable f = tautology $ Not f
 satisfiable :: Formula -> Bool
 satisfiable f = not $ unsatisfiable f
 
+-- Reduces a formula to negation normal form.
+nnf :: Formula -> Formula
+nnf (e1 :/\: e2) = (nnf e1) :/\: (nnf e2)
+nnf (e1 :\/: e2) = (nnf e1) :\/: (nnf e2)
+nnf (e1 :->: e2) = (nnf (Not e1)) :\/: (nnf e2)
+nnf (e1 :<->: e2) = ((nnf e1) :/\: (nnf e2)) :\/: ((nnf (Not e1)) :/\: (nnf (Not e2)))
+nnf (Not (Not e1)) = nnf e1
+nnf (Not (e1 :/\: e2)) = (nnf (Not e1)) :\/: (nnf (Not e2))
+nnf (Not (e1 :\/: e2)) = (nnf (Not e1)) :/\: (nnf (Not e2))
+nnf (Not (e1 :->: e2)) = (nnf e1) :/\: (nnf (Not e2))
+nnf (Not (e1 :<->: e2)) = ((nnf e1) :/\: (nnf (Not e2))) :\/: ((nnf (Not e1)) :/\: (nnf e2))
+nnf f = f
+
 -- Reduces a formula to conjunctive normal form.
 cnf :: Formula -> Formula
 cnf f = f
