@@ -53,8 +53,7 @@ variables' (e1 :<->: e2) = variables'' e1 e2
 variables'' e1 e2 = variables' e1 ++ variables' e2
 
 -- Generate all possible assignments of truth values to variable.
--- (p.s. this function is a disgusting mess)
--- Either this is too slow or formulas need to be simplified before being fed to it.
+-- (p.s. this function is a disgusting mess and exp time)
 assignments :: Formula -> [Mapping]
 assignments f = nub $ map fromList $ splitEvery (length vs) $ perms vs
   where
@@ -83,6 +82,17 @@ nnf (Not (e1 :\/: e2)) = (nnf (Not e1)) :/\: (nnf (Not e2))
 nnf (Not (e1 :->: e2)) = (nnf e1) :/\: (nnf (Not e2))
 nnf (Not (e1 :<->: e2)) = ((nnf e1) :/\: (nnf (Not e2))) :\/: ((nnf (Not e1)) :/\: (nnf e2))
 nnf f = f
+
+-- TODO: This doesn't handle the empty list.
+concatf :: [Formula] -> (Formula -> Formula -> Formula) -> Formula
+concatf [f] _ = f
+concatf (x:xs) op = x `op` (concatf xs op)
+
+conj :: [Formula] -> Formula
+conj f = concatf f (:/\:)
+
+disj :: [Formula] -> Formula
+disj f = concatf f (:\/:)
 
 -- Reduces a formula to conjunctive normal form.
 cnf :: Formula -> Formula
