@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wall #-}
+
 import Prelude hiding (lookup)
 import Data.Map (Map, lookup, fromList)
 import Data.Maybe (fromMaybe)
@@ -35,24 +37,30 @@ eval (e1 :->: e2) vs = not (eval e1 vs) || eval e2 vs
 eval (e1 :<->: e2) vs = eval e1 vs == eval e2 vs
 
 -- Given a formula, return a list of all the variables.
-variables :: Formula -> [Char]
-variables (Var c) = [c]
-variables (Not e) = variables e
-variables (e1 :\/: e2) = variables' e1 e2
-variables (e1 :/\: e2) = variables' e1 e2
-variables (e1 :->: e2) = variables' e1 e2
-variables (e1 :<->: e2) = variables' e1 e2
+-- TODO Fix this to remove duplicates.
 
-variables' e1 e2 = variables e1 ++ variables e2
+variables :: Formula -> [Char]
+variables f = nub $ variables' f
+
+variables' :: Formula -> [Char]
+variables' (Var c) = [c]
+variables' (Not e) = variables' e
+variables' (e1 :\/: e2) = variables'' e1 e2
+variables' (e1 :/\: e2) = variables'' e1 e2
+variables' (e1 :->: e2) = variables'' e1 e2
+variables' (e1 :<->: e2) = variables'' e1 e2
+
+variables'' e1 e2 = variables' e1 ++ variables' e2
 
 -- Generate all possible assignments of truth values to variable.
 -- (p.s. this function is a disgusting mess)
+-- Either this is too slow or formulas need to be simplified before being fed to it.
 assignments :: Formula -> [Mapping]
 assignments f = nub $ map fromList $ splitEvery (length vs) $ perms vs
   where
     vs = variables f
-    half tf vs = zip (concat (permutations vs)) (cycle tf)
-    perms vs = half [True, False] vs ++ half [False, True] vs
+    half tf vz = zip (concat (permutations vz)) (cycle tf)
+    perms vz = half [True, False] vz ++ half [False, True] vz
 
 tautology :: Formula -> Bool
 tautology f = and $ map (eval f) (assignments f)
