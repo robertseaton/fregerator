@@ -6,6 +6,8 @@ import Data.Maybe (fromMaybe)
 import Data.List (nub, permutations)
 import Data.List.Split (splitEvery)
 
+type Mapping = Map Char Bool
+
 data Formula = Var Char
              | Not Formula
              | Formula :/\: Formula
@@ -22,7 +24,8 @@ instance Show Formula where
     show (e1 :->: e2) = show' e1 "→" e2
     show (e1 :<->: e2) = show' e1 "↔" e2
 
-type Mapping = Map Char Bool
+show' :: Formula -> String -> Formula -> String
+show' e1 s e2 = (show e1) ++ " " ++ s ++ " " ++ (show e2)
 
 -- Given a formula and a map, evaluates the truth value.
 -- Example:
@@ -100,6 +103,3 @@ cnf f = f
   
 prove :: Formula -> Bool
 prove _ = False
-
-show' :: Formula -> String -> Formula -> String
-show' e1 s e2 = (show e1) ++ " " ++ s ++ " " ++ (show e2)
