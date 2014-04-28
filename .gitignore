@@ -1,0 +1,6 @@
+*.hi
+*.o
+fregerator
+dist/**
+prover
+*.prof
