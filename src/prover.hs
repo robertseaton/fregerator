@@ -1,10 +1,13 @@
 {-# OPTIONS_GHC -Wall #-}
 
 import Prelude hiding (lookup)
+import Control.Monad (liftM2)
+import Data.Functor ((<$>))
 import Data.Map (Map, lookup, fromList)
 import Data.Maybe (fromMaybe)
 import Data.List (nub, permutations)
 import Data.List.Split (splitEvery)
+import Test.QuickCheck
 
 type Mapping = Map Char Bool
 
@@ -23,6 +26,32 @@ instance Show Formula where
     show (e1 :/\: e2) = show' e1 "∧" e2
     show (e1 :->: e2) = show' e1 "→" e2
     show (e1 :<->: e2) = show' e1 "↔" e2
+
+instance Arbitrary Formula where
+  arbitrary = randomFormula
+
+
+randomFormula :: Gen Formula
+randomFormula = sized randomFormula'
+
+randomFormula' :: Int -> Gen Formula
+randomFormula' n | n > 0 = oneof [ randomVar
+                                  , randomNot boundedFormula
+                                  , randomBin boundedFormula
+                                  ]
+              | otherwise = randomVar
+  where
+    boundedFormula = randomFormula' (n `div` 4)
+
+randomNot :: Gen Formula -> Gen Formula
+randomNot e = Not <$> e
+
+randomBin :: Gen Formula -> Gen Formula
+randomBin e = oneof . map (\c -> liftM2 c e e)
+               $ [(:/\:), (:\/:), (:->:), (:<->:)]
+
+randomVar :: Gen Formula
+randomVar = Var <$> arbitrary
 
 show' :: Formula -> String -> Formula -> String
 show' e1 s e2 = (show e1) ++ " " ++ s ++ " " ++ (show e2)
