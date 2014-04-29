@@ -15,7 +15,25 @@ category:            Math
 build-type:          Simple
 cabal-version:       >=1.8
 
+Library
+  Hs-Source-Dirs: src
+  GHC-options: -Wall
+  Build-depends: QuickCheck >= 2.4,
+                 split,
+                 containers,
+                 base ==4.6.*
+  Exposed-modules: Prover
+  
 executable fregerator
-  main-is: fregerator.hs
+  main-is: src/fregerator.hs
   -- other-modules:       
-  build-depends:       base ==4.6.*
+  build-depends:       base ==4.6.*, fregerator
+
+Test-Suite test-fregerator
+  Type: exitcode-stdio-1.0
+  Main-is: tests/main.hs
+  GHC-options: -Wall
+  Build-depends: base >= 4 && < 5,
+                    fregerator,
+                    test-framework >= 0.4.1,
+                    test-framework-quickcheck2

@@ -1,5 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
 
+import Prover
 import System.Environment
 
 main :: IO ()
