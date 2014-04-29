@@ -1,5 +1,19 @@
 {-# OPTIONS_GHC -Wall #-}
 
+module Prover
+       ( Formula (..)
+       , Mapping
+       , eval
+       , nnf
+       , satisfiable
+       , show
+       , tautology
+       , unsatisfiable
+       , variables
+       , equivalent
+       )
+       where
+
 import Prelude hiding (lookup)
 import Control.Monad (liftM2)
 import Data.Functor ((<$>))
@@ -125,6 +139,15 @@ conj f = concatf f (:/\:)
 
 disj :: [Formula] -> Formula
 disj f = concatf f (:\/:)
+
+iffj :: [Formula] -> Formula
+iffj f = concatf f (:<->:)
+
+equivalent' :: [Formula] -> Bool
+equivalent' f = tautology $ iffj f
+
+equivalent :: Formula -> Formula -> Bool
+equivalent f1 f2 = equivalent' [f1, f2]
 
 -- Reduces a formula to conjunctive normal form.
 cnf :: Formula -> Formula
