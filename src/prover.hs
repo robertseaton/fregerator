@@ -3,6 +3,8 @@
 module Prover
        ( Formula (..)
        , Mapping
+       , dnf
+       , equivalent
        , eval
        , nnf
        , satisfiable
@@ -10,7 +12,6 @@ module Prover
        , tautology
        , unsatisfiable
        , variables
-       , equivalent
        )
        where
 
