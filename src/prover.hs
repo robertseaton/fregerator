@@ -117,6 +117,8 @@ satisfiable :: Formula -> Bool
 satisfiable f = not $ unsatisfiable f
 
 -- Reduces a formula to negation normal form.
+-- A formula is in negation normal form when NOT is only applied to variables,
+-- and is otherwise a seqence of ANDs and ORs.
 nnf :: Formula -> Formula
 nnf (e1 :/\: e2) = (nnf e1) :/\: (nnf e2)
 nnf (e1 :\/: e2) = (nnf e1) :\/: (nnf e2)
@@ -128,6 +130,23 @@ nnf (Not (e1 :\/: e2)) = (nnf (Not e1)) :/\: (nnf (Not e2))
 nnf (Not (e1 :->: e2)) = (nnf e1) :/\: (nnf (Not e2))
 nnf (Not (e1 :<->: e2)) = ((nnf e1) :/\: (nnf (Not e2))) :\/: ((nnf (Not e1)) :/\: (nnf e2))
 nnf f = f
+
+-- Reduces a formula to disjunctive normal form.
+-- A formula is in disjunction normal form when it's a disjunction of conjunctions
+-- or literals.
+-- For example: (a :/\: b) :\/: (b :/\: c)
+dnf :: Formula -> Formula
+dnf = dnf' . nnf
+  where
+    dnf' (e1 :/\: e2) = (dnf' e1) `dist` (dnf' e2)
+    dnf' (e1 :\/: e2) = (dnf' e1) :\/: (dnf' e2)
+    dnf' expr = expr
+
+    -- Distributive law, propositional logic.
+    dist (e1 :\/: e2) e3 = (e1 `dist` e3) :\/: (e2 `dist` e3)
+    dist e1 (e2 :\/: e3) = (e1 `dist` e2) :\/: (e1 `dist` e3)
+    dist e1 e2 = e1 :/\: e2
+
 
 -- TODO: This doesn't handle the empty list.
 concatf :: [Formula] -> (Formula -> Formula -> Formula) -> Formula
