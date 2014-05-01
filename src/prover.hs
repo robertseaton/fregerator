@@ -3,6 +3,7 @@
 module Prover
        ( Formula (..)
        , Mapping
+       , cnf
        , dnf
        , equivalent
        , eval
@@ -148,6 +149,19 @@ dnf = dnf' . nnf
     dist e1 (e2 :\/: e3) = (e1 `dist` e2) :\/: (e1 `dist` e3)
     dist e1 e2 = e1 :/\: e2
 
+-- Reduces a formula to conjunctive normal form.
+-- A formula is in conjunctive normal form when it's a conjunction of disjunctions.
+cnf :: Formula -> Formula
+cnf = cnf' . nnf
+  where
+    cnf' (e1 :/\: e2) = (cnf' e1) :/\: (cnf' e2)
+    cnf' (e1 :\/: e2) = (cnf' e1) `dist` (cnf' e2)
+    cnf' expr = expr
+
+    dist (e1 :/\: e2) e3 = (e1 `dist` e3) :/\: (e2 `dist` e3)
+    dist e1 (e2 :/\: e3) = (e1 `dist` e2) :/\: (e1 `dist` e3)
+    dist e1 e2 = e1 :\/: e2
+    
 
 -- TODO: This doesn't handle the empty list.
 concatf :: [Formula] -> (Formula -> Formula -> Formula) -> Formula
@@ -169,9 +183,5 @@ equivalent' f = tautology $ iffj f
 equivalent :: Formula -> Formula -> Bool
 equivalent f1 f2 = equivalent' [f1, f2]
 
--- Reduces a formula to conjunctive normal form.
-cnf :: Formula -> Formula
-cnf f = f
-  
 prove :: Formula -> Bool
 prove _ = False
