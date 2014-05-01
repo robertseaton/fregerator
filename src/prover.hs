@@ -140,14 +140,9 @@ nnf f = f
 dnf :: Formula -> Formula
 dnf = dnf' . nnf
   where
-    dnf' (e1 :/\: e2) = (dnf' e1) `dist` (dnf' e2)
+    dnf' (e1 :/\: e2) = dist (dnf' e1) (dnf' e2) (:/\:)
     dnf' (e1 :\/: e2) = (dnf' e1) :\/: (dnf' e2)
     dnf' expr = expr
-
-    -- Distributive law, propositional logic.
-    dist (e1 :\/: e2) e3 = (e1 `dist` e3) :\/: (e2 `dist` e3)
-    dist e1 (e2 :\/: e3) = (e1 `dist` e2) :\/: (e1 `dist` e3)
-    dist e1 e2 = e1 :/\: e2
 
 -- Reduces a formula to conjunctive normal form.
 -- A formula is in conjunctive normal form when it's a conjunction of disjunctions.
@@ -155,13 +150,16 @@ cnf :: Formula -> Formula
 cnf = cnf' . nnf
   where
     cnf' (e1 :/\: e2) = (cnf' e1) :/\: (cnf' e2)
-    cnf' (e1 :\/: e2) = (cnf' e1) `dist` (cnf' e2)
+    cnf' (e1 :\/: e2) = dist (cnf' e1) (cnf' e2) (:\/:)
     cnf' expr = expr
 
-    dist (e1 :/\: e2) e3 = (e1 `dist` e3) :/\: (e2 `dist` e3)
-    dist e1 (e2 :/\: e3) = (e1 `dist` e2) :/\: (e1 `dist` e3)
-    dist e1 e2 = e1 :\/: e2
-    
+-- Distributive law for propositional logic.
+dist :: Formula -> Formula -> (Formula -> Formula -> Formula) -> Formula
+dist (e1 :\/: e2) e3 op = (dist e1 e3 op) :\/: (dist e2 e3 op)
+dist e1 (e2 :\/: e3) op = (dist e1 e2 op) :\/: (dist e1 e3 op)
+dist (e1 :/\: e2) e3 op = (dist e1 e3 op) :/\: (dist e2 e3 op)
+dist e1 (e2 :/\: e3) op = (dist e1 e2 op) :/\: (dist e1 e3 op)
+dist e1 e2 op = op e1 e2
 
 -- TODO: This doesn't handle the empty list.
 concatf :: [Formula] -> (Formula -> Formula -> Formula) -> Formula
