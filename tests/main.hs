@@ -13,8 +13,6 @@ tests =
           , testProperty "CNFEquiv" propCNFEquiv]
       ]
 
---nnfEquiv 
-
 propNNFEquiv :: Formula -> Bool
 propNNFEquiv f = f `equivalent` (nnf f)
 
