@@ -180,6 +180,3 @@ equivalent' f = tautology $ iffj f
 
 equivalent :: Formula -> Formula -> Bool
 equivalent f1 f2 = equivalent' [f1, f2]
-
-prove :: Formula -> Bool
-prove _ = False
