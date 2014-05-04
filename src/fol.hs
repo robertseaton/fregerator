@@ -8,5 +8,5 @@ data FOL = Impl FOL FOL
          | FF
          | Or FOL FOL
          | And FOL FOL
-         | Exists (Term -> FOL)
-         | Forall (Term -> FOL)
+         | Exists String FOL
+         | Forall String FOL
