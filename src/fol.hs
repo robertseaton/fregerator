@@ -5,13 +5,13 @@ import Data.List(intersperse)
 data Term = Const String [Term]
             | Var String
 
-data FOL = Impl FOL FOL
+data FOL = TT
+         | FF
          | Atom String [Term]
          | Not FOL
-         | TT
-         | FF
-         | Or FOL FOL
          | And FOL FOL
+         | Or FOL FOL
+         | Impl FOL FOL
          | Exists String FOL
          | Forall String FOL
 
@@ -27,15 +27,15 @@ parenw :: String -> String
 parenw s = "(" ++ s ++ ")"
 
 instance Show FOL where
-  show (Not c) = '¬' : show c
-  show (Or e1 e2) = show' e1 "∨" e2
-  show (And e1 e2) = show' e1 "∧" e2
-  show (Impl e1 e2) = show' e1 "→" e2
   show (TT) = "True"
   show (FF) = "False"
+  show (Atom f args) = id f ++ showt args
+  show (Not c) = '¬' : show c
+  show (And e1 e2) = show' e1 "∧" e2
+  show (Or e1 e2) = show' e1 "∨" e2
+  show (Impl e1 e2) = show' e1 "→" e2
   show (Exists c f) = "∃." ++ show f
   show (Forall c f) = "∀." ++ show f
-  show (Atom f args) = id f ++ showt args
 
 
 show' :: FOL -> String -> FOL -> String
