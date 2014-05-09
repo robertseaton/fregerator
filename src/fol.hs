@@ -16,11 +16,15 @@ data FOL = Impl FOL FOL
          | Forall String FOL
 
 instance Show Term where
-  show (Const f args) = id f ++ "(" ++ showt args ++ ")"
+  show (Const f args) = id f ++ showt args
   show (Var c) = id c
 
 showt :: [Term] -> String
-showt a = concat $ intersperse ", " $ map show a
+showt a = parenw $ concat $ intersperse ", " $ map show a
+
+-- Wraps a string in parentheses.
+parenw :: String -> String
+parenw s = "(" ++ s ++ ")"
 
 instance Show FOL where
   show (Not c) = '¬' : show c
@@ -31,7 +35,7 @@ instance Show FOL where
   show (FF) = "False"
   show (Exists c f) = "∃." ++ show f
   show (Forall c f) = "∀." ++ show f
-  show (Atom f args) = id f ++ "(" ++ showt args ++ ")"
+  show (Atom f args) = id f ++ showt args
 
 
 show' :: FOL -> String -> FOL -> String
