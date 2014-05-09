@@ -16,11 +16,11 @@ data FOL = Impl FOL FOL
          | Forall String FOL
 
 instance Show Term where
-  show (Const f args) = id f ++ "(" ++ showargs args ++ ")"
+  show (Const f args) = id f ++ "(" ++ showt args ++ ")"
   show (Var c) = id c
 
-showargs :: [Term] -> String
-showargs a = concat $ intersperse ", " (map show a )
---instance Show FOL where
+showt :: [Term] -> String
+showt a = concat $ intersperse ", " $ map show a
+
   
 
