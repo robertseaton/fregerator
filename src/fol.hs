@@ -22,5 +22,17 @@ instance Show Term where
 showt :: [Term] -> String
 showt a = concat $ intersperse ", " $ map show a
 
-  
+instance Show FOL where
+  show (Not c) = '¬' : show c
+  show (Or e1 e2) = show' e1 "∨" e2
+  show (And e1 e2) = show' e1 "∧" e2
+  show (Impl e1 e2) = show' e1 "→" e2
+  show (TT) = "True"
+  show (FF) = "False"
+  show (Exists c f) = "∃." ++ show f
+  show (Forall c f) = "∀." ++ show f
+  show (Atom f args) = id f ++ "(" ++ showt args ++ ")"
 
+
+show' :: FOL -> String -> FOL -> String
+show' e1 op e2 = show e1 ++ " " ++ op ++ " " ++ show e2
