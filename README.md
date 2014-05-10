@@ -16,4 +16,8 @@ Released under the GPLv3.
 
 # Credits
 
-Early versions of the codebase are inspired by some of the work on Benedict Eastaugh's [hatt](https://github.com/beastaugh/hatt). 
+* Early versions of the codebase are inspired by some of the work on Benedict Eastaugh's [hatt](https://github.com/beastaugh/hatt). 
+
+I have benefited greatly from many different papers.
+
+* The representation of first-order logic was informed by Kenneth Knowles's article in *The Monad Reader*, ["First-Order Logic `a la Carte"](http://www.haskell.org/wikiupload/6/6a/TMR-Issue11.pdf).
