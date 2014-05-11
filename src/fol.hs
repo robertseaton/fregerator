@@ -43,6 +43,17 @@ show' e1 op e2 = show e1 ++ " " ++ op ++ " " ++ show e2
 simplify :: FOL -> FOL
 simplify = undefined
 
+-- Reduce a sentence in first-order logic to negation normal form.
+nnf :: FOL -> FOL
+nnf (And p q) = And (nnf p) (nnf q)
+nnf (Or p q) = Or (nnf p) (nnf q)
+nnf (Impl p q) = Or (nnf (Not p)) (nnf q)
+nnf (Forall x p) = Forall x (nnf p)
+nnf (Exists x p) = Exists x (nnf (Not p))
+nnf (Not (Forall x p)) = Exists x (nnf (Not p))
+nnf (Not (Exists x p)) = Forall x (nnf (Not p))
+nnf f = f
+
 pnf :: FOL -> FOL
 pnf = undefined
 
