@@ -18,8 +18,9 @@ Released under the GPLv3.
 
 * Early versions of the codebase are inspired by some of the work on Benedict Eastaugh's [hatt](https://github.com/beastaugh/hatt). 
 
-I have benefited greatly from many different papers:
+I have benefited greatly from many different books and papers:
 
+* *The Handbook of Practical Logic and Automated Reasoning* has proved to be an invaluable resource for when it comes to translating results in logic into algorithms.
 * The representation of first-order logic was informed by Kenneth Knowles's article in *The Monad Reader*, ["First-Order Logic à la Carte"](http://www.haskell.org/wikiupload/6/6a/TMR-Issue11.pdf).
 * Frank Wilson's [dissertation on building a theorem prover in Haskell](http://www.dcs.shef.ac.uk/intranet/teaching/public/projects/archive/ug2006/pdf/u3fw.pdf).
 * Laurence Edward Day's paper ["Implementing a Propositional Logic Theorem Prover in Haskell"](http://www.cs.nott.ac.uk/~led/papers/led_bsc_dissertation.pdf).
