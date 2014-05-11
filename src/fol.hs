@@ -39,3 +39,15 @@ parenw s = "(" ++ s ++ ")"
 
 show' :: FOL -> String -> FOL -> String
 show' e1 op e2 = show e1 ++ " " ++ op ++ " " ++ show e2
+
+simplify :: FOL -> FOL
+simplify = undefined
+
+pnf :: FOL -> FOL
+pnf = undefined
+
+cnf :: FOL -> FOL
+cnf = undefined
+
+resolution :: FOL -> Bool
+resolution = undefined
